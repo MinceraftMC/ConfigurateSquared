@@ -1,3 +1,9 @@
+import com.github.jengelman.gradle.plugins.shadow.ShadowPlugin
+
+plugins {
+    alias(libs.plugins.gradleup.shadow) apply false
+}
+
 allprojects {
     group = "dev.minceraft"
     version = "1.0.0"
@@ -5,6 +11,7 @@ allprojects {
 
 subprojects {
     apply<JavaLibraryPlugin>()
+    apply<ShadowPlugin>()
 
     repositories {
         mavenCentral()

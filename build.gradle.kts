@@ -5,7 +5,7 @@ plugins {
 }
 
 allprojects {
-    group = "dev.minceraft"
+    group = "dev.minceraft.configuratesquared"
     version = "1.0.0"
 }
 

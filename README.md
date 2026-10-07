@@ -48,7 +48,7 @@ Add the repository and dependency to your build system. Replace `{your-format}` 
 
 <dependencies>
     <dependency>
-        <groupId>dev.minceraft</groupId>
+        <groupId>dev.minceraft.configuratesquared</groupId>
         <artifactId>configuratesquared-{your-format}</artifactId>
         <version>1.0.0</version>
         <scope>provided</scope>
@@ -70,7 +70,7 @@ repositories {
 }
 
 dependencies {
-    compileOnly 'dev.minceraft:configuratesquared-{your-format}:1.0.0'
+    compileOnly 'dev.minceraft.configuratesquared:configuratesquared-{your-format}:1.0.0'
 }
 ```
 
@@ -87,7 +87,7 @@ repositories {
 }
 
 dependencies {
-    compileOnly("dev.minceraft:configuratesquared-{you-format}:1.0.0")
+    compileOnly("dev.minceraft.configuratesquared:configuratesquared-{you-format}:1.0.0")
 }
 ```
 

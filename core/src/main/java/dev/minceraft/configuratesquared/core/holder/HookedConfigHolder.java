@@ -1,7 +1,7 @@
-package dev.minceraft.configuratesquared.holder;
+package dev.minceraft.configuratesquared.core.holder;
 
-import dev.minceraft.configuratesquared.holder.simplified.IHookedConfigHolder;
-import dev.minceraft.configuratesquared.stores.IConfigStore;
+import dev.minceraft.configuratesquared.core.holder.simplified.IHookedConfigHolder;
+import dev.minceraft.configuratesquared.core.stores.IConfigStore;
 import org.jspecify.annotations.NullMarked;
 import org.jspecify.annotations.Nullable;
 import org.spongepowered.configurate.loader.AbstractConfigurationLoader;

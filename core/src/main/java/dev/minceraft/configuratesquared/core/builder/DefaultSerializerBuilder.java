@@ -1,8 +1,8 @@
-package dev.minceraft.configuratesquared.builder;
+package dev.minceraft.configuratesquared.core.builder;
 
-import dev.minceraft.configuratesquared.serializer.defaults.AddressSerializer;
-import dev.minceraft.configuratesquared.serializer.defaults.EnumSerializer;
-import dev.minceraft.configuratesquared.serializer.defaults.PathSerializer;
+import dev.minceraft.configuratesquared.core.serializer.defaults.AddressSerializer;
+import dev.minceraft.configuratesquared.core.serializer.defaults.EnumSerializer;
+import dev.minceraft.configuratesquared.core.serializer.defaults.PathSerializer;
 import io.leangen.geantyref.TypeToken;
 
 import java.net.InetSocketAddress;

@@ -1,4 +1,4 @@
-package dev.minceraft.configuratesquared.serializer;
+package dev.minceraft.configuratesquared.core.serializer;
 
 import org.jspecify.annotations.NullMarked;
 import org.spongepowered.configurate.ConfigurationNode;

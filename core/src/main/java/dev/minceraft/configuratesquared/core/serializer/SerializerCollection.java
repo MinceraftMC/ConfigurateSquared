@@ -1,6 +1,6 @@
-package dev.minceraft.configuratesquared.serializer;
+package dev.minceraft.configuratesquared.core.serializer;
 
-import dev.minceraft.configuratesquared.builder.ConfigHolders;
+import dev.minceraft.configuratesquared.core.builder.ConfigHolders;
 import io.leangen.geantyref.TypeToken;
 import org.checkerframework.checker.nullness.qual.Nullable;
 import org.jetbrains.annotations.Contract;

@@ -1,4 +1,4 @@
-package dev.minceraft.configuratesquared.stores;
+package dev.minceraft.configuratesquared.core.stores;
 
 import org.jspecify.annotations.NullMarked;
 import org.jspecify.annotations.Nullable;

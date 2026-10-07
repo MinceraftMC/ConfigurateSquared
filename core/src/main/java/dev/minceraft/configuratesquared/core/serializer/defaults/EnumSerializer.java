@@ -1,4 +1,4 @@
-package dev.minceraft.configuratesquared.serializer.defaults;
+package dev.minceraft.configuratesquared.core.serializer.defaults;
 
 import io.leangen.geantyref.GenericTypeReflector;
 import io.leangen.geantyref.TypeToken;

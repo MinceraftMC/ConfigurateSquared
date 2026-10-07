@@ -1,5 +1,6 @@
 package dev.minceraft.configureableconfigurate.holder;
 
+import dev.minceraft.configureableconfigurate.holder.projected.IHookedConfigHolder;
 import dev.minceraft.configureableconfigurate.stores.IConfigStore;
 import org.jspecify.annotations.NullMarked;
 import org.spongepowered.configurate.loader.AbstractConfigurationLoader;
@@ -11,22 +12,30 @@ import java.util.function.Function;
 import java.util.function.Supplier;
 
 @NullMarked
-public class HookedConfigHolder<T, L extends AbstractConfigurationLoader<?>> extends CachedConfigHolder<T, L> {
+public class HookedConfigHolder<
+        H extends CachedConfigHolder<H, T, L, B>,
+        T,
+        L extends AbstractConfigurationLoader<?>,
+        B extends AbstractConfigurationLoader.Builder<B, L>
+        > extends CachedConfigHolder<H, T, L, B>
+        implements IHookedConfigHolder<T> {
 
     private final Set<Consumer<T>> reloadHooks = new CopyOnWriteArraySet<>();
 
-    public <B extends AbstractConfigurationLoader.Builder<B, L>> HookedConfigHolder(
+    public HookedConfigHolder(
             Class<T> configClass,
-            Function<BasicConfigHolder<T, L>, T> def,
+            Function<H, T> def,
             IConfigStore store,
             Supplier<B> loaderBuilder) {
         super(configClass, def, store, loaderBuilder);
     }
 
+    @Override
     public void addReloadHook(Consumer<T> consumer) {
         this.reloadHooks.add(consumer);
     }
 
+    @Override
     public void addReloadHookAndRun(Consumer<T> consumer) {
         this.addReloadHook(consumer);
 

@@ -1,5 +1,6 @@
 package dev.minceraft.configureableconfigurate.holder;
 
+import dev.minceraft.configureableconfigurate.holder.projected.ICachedConfigHolder;
 import dev.minceraft.configureableconfigurate.stores.IConfigStore;
 import org.jspecify.annotations.NullMarked;
 import org.jspecify.annotations.Nullable;
@@ -9,18 +10,26 @@ import java.util.function.Function;
 import java.util.function.Supplier;
 
 @NullMarked
-public class CachedConfigHolder<T, L extends AbstractConfigurationLoader<?>> extends BasicConfigHolder<T, L> {
+public class CachedConfigHolder<
+        H extends CachedConfigHolder<H, T, L, B>,
+        T,
+        L extends AbstractConfigurationLoader<?>,
+        B extends AbstractConfigurationLoader.Builder<B, L>
+        > extends BasicConfigHolder<H, T, L, B>
+        implements ICachedConfigHolder<T> {
 
     protected volatile @Nullable T config;
 
-    public <B extends AbstractConfigurationLoader.Builder<B, L>> CachedConfigHolder(
+    public CachedConfigHolder(
             Class<T> configClass,
-            Function<BasicConfigHolder<T, L>, T> def,
+            Function<H, T> def,
             IConfigStore store,
-            Supplier<B> loaderBuilder) {
+            Supplier<B> loaderBuilder
+    ) {
         super(configClass, def, store, loaderBuilder);
     }
 
+    @Override
     public T reloadConfig() {
         T config = this.loadConfig(true);
         if (config == null) {
@@ -30,6 +39,7 @@ public class CachedConfigHolder<T, L extends AbstractConfigurationLoader<?>> ext
         return config;
     }
 
+    @Override
     public T getConfigOrLoad() {
         T config = this.config;
         if (config == null) {
@@ -38,6 +48,7 @@ public class CachedConfigHolder<T, L extends AbstractConfigurationLoader<?>> ext
         return config;
     }
 
+    @Override
     public T getConfig() {
         T config = this.config;
         if (config == null) {

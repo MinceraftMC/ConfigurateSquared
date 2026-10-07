@@ -1,5 +1,6 @@
 package dev.minceraft.configureableconfigurate.holder;
 
+import dev.minceraft.configureableconfigurate.holder.projected.IBasicConfigHolder;
 import dev.minceraft.configureableconfigurate.stores.IConfigStore;
 import org.jspecify.annotations.NullMarked;
 import org.jspecify.annotations.Nullable;
@@ -12,16 +13,21 @@ import java.util.function.Function;
 import java.util.function.Supplier;
 
 @NullMarked
-public class BasicConfigHolder<T, L extends AbstractConfigurationLoader<?>> {
+public class BasicConfigHolder<
+        H extends BasicConfigHolder<H, T, L, B>,
+        T,
+        L extends AbstractConfigurationLoader<?>,
+        B extends AbstractConfigurationLoader.Builder<B, L>>
+        implements IBasicConfigHolder<T> {
 
     private final Class<T> configClass;
-    private final Function<BasicConfigHolder<T, L>, T> def;
+    private final Function<H, T> def;
     private final IConfigStore store;
     private final Supplier<L> loader;
 
-    public <B extends AbstractConfigurationLoader.Builder<B, L>> BasicConfigHolder(
+    public BasicConfigHolder(
             Class<T> configClass,
-            Function<BasicConfigHolder<T, L>, T> def,
+            Function<H, T> def,
             IConfigStore store,
             Supplier<B> loaderBuilder
     ) {
@@ -42,11 +48,11 @@ public class BasicConfigHolder<T, L extends AbstractConfigurationLoader<?>> {
         };
     }
 
-    @Nullable
-    public T loadConfig(boolean saveAfterLoad) {
+    @Override
+    public @Nullable T loadConfig(boolean saveAfterLoad) {
         T config;
         if (this.store.getReader() == null) {
-            config = this.def.apply(this);
+            config = this.def.apply(this.self());
         } else {
             try {
                 config = this.loader.get().load().get(this.configClass);
@@ -60,11 +66,7 @@ public class BasicConfigHolder<T, L extends AbstractConfigurationLoader<?>> {
         return config;
     }
 
-    @Nullable
-    public T loadConfig() {
-        return this.loadConfig(true);
-    }
-
+    @Override
     public void saveConfig(T config) {
         L loader = this.loader.get();
         try {
@@ -72,6 +74,11 @@ public class BasicConfigHolder<T, L extends AbstractConfigurationLoader<?>> {
         } catch (ConfigurateException exception) {
             throw new RuntimeException("Failed to save config", exception);
         }
+    }
+
+    @SuppressWarnings("unchecked")
+    protected H self() {
+        return (H) this;
     }
 
 }

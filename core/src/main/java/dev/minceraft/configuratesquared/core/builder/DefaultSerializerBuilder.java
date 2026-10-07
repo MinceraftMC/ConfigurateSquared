@@ -32,7 +32,7 @@ public final class DefaultSerializerBuilder<B extends ConfigHolders.Builder<?, ?
     }
 
     public DefaultSerializerBuilder<B> withAll() {
-        this.builder.withAllDefaults();
+        this.builder.withAllDefaultSerializers();
         return this;
     }
 }

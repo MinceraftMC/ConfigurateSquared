@@ -5,6 +5,7 @@ import dev.minceraft.configuratesquared.core.holder.CachedConfigHolder;
 import dev.minceraft.configuratesquared.core.holder.HookedConfigHolder;
 import dev.minceraft.configuratesquared.core.holder.simplified.IBasicConfigHolder;
 import dev.minceraft.configuratesquared.core.holder.simplified.ICachedConfigHolder;
+import dev.minceraft.configuratesquared.core.holder.simplified.IHookedConfigHolder;
 import dev.minceraft.configuratesquared.core.serializer.ConfigurateSerializer;
 import dev.minceraft.configuratesquared.core.serializer.Serializer;
 import dev.minceraft.configuratesquared.core.serializer.SerializerCollection;
@@ -30,11 +31,10 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.function.Consumer;
 import java.util.function.Function;
-import java.util.function.Supplier;
 import java.util.function.UnaryOperator;
 
 @NullMarked
-public class ConfigHolders<L extends AbstractConfigurationLoader<?>, B extends AbstractConfigurationLoader.Builder<B, L>> {
+public final class ConfigHolders {
 
     public static final SerializerCollection DEFAULT_SERIALIZERS = SerializerCollection.builder()
             .with(InetSocketAddress.class, AddressSerializer.INSTANCE)
@@ -42,26 +42,11 @@ public class ConfigHolders<L extends AbstractConfigurationLoader<?>, B extends A
             .with(Path.class, PathSerializer.INSTANCE)
             .build();
 
-    private final Supplier<B> loaderSupplier;
-
-    protected ConfigHolders(Supplier<B> loaderSupplier) {
-        this.loaderSupplier = loaderSupplier;
+    private ConfigHolders() {
     }
 
     public static <L extends AbstractConfigurationLoader<N>, N extends ScopedConfigurationNode<N>, B extends AbstractConfigurationLoader.Builder<B, L>> Builder<L, N, B, ?> builder(B loaderBuilder) {
         return new Builder<>(loaderBuilder);
-    }
-
-    public <H extends BasicConfigHolder<H, T, L, B>, T> IBasicConfigHolder<T> basic(Class<T> configClass, Function<H, @Nullable T> def, IConfigStore store) {
-        return new BasicConfigHolder<>(configClass, def, store, this.loaderSupplier);
-    }
-
-    public <H extends CachedConfigHolder<H, T, L, B>, T> ICachedConfigHolder<T> cached(Class<T> configClass, Function<H, @Nullable T> def, IConfigStore store) {
-        return new CachedConfigHolder<>(configClass, def, store, this.loaderSupplier);
-    }
-
-    public <H extends HookedConfigHolder<H, T, L, B>, T> ICachedConfigHolder<T> hooked(Class<T> configClass, Function<H, @Nullable T> def, IConfigStore store) {
-        return new HookedConfigHolder<>(configClass, def, store, this.loaderSupplier);
     }
 
     public static class Builder<
@@ -112,17 +97,17 @@ public class ConfigHolders<L extends AbstractConfigurationLoader<?>, B extends A
             return this.self();
         }
 
-        public C configureDefaults(UnaryOperator<ConfigurationOptions> consumer) {
+        public C configureDefaultSerializers(UnaryOperator<ConfigurationOptions> consumer) {
             this.builder.defaultOptions(consumer);
             return this.self();
         }
 
-        public C withDefaults(Consumer<DefaultSerializerBuilder<C>> consumer) {
+        public C withDefaultSerializers(Consumer<DefaultSerializerBuilder<C>> consumer) {
             consumer.accept(new DefaultSerializerBuilder<>(this.self()));
             return this.self();
         }
 
-        public C withAllDefaults() {
+        public C withAllDefaultSerializers() {
             return this.withSerializers(DEFAULT_SERIALIZERS);
         }
 
@@ -164,7 +149,7 @@ public class ConfigHolders<L extends AbstractConfigurationLoader<?>, B extends A
             );
         }
 
-        public <H extends HookedConfigHolder<H, T, L, B>, T> ICachedConfigHolder<T> hooked(Class<T> configClass, @Nullable Function<H, T> def) {
+        public <H extends HookedConfigHolder<H, T, L, B>, T> IHookedConfigHolder<T> hooked(Class<T> configClass, @Nullable Function<H, T> def) {
             return new HookedConfigHolder<H, T, L, B>(
                     configClass,
                     def == null ? h -> null : def,

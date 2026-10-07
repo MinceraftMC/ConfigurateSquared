@@ -12,6 +12,6 @@ repositories {
 }
 
 dependencies {
-    api(libs.bundles.configurate)
+    api(libs.configurate.core)
     api(libs.jspecify)
 }

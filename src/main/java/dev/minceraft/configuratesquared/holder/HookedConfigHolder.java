@@ -3,6 +3,7 @@ package dev.minceraft.configuratesquared.holder;
 import dev.minceraft.configuratesquared.holder.simplified.IHookedConfigHolder;
 import dev.minceraft.configuratesquared.stores.IConfigStore;
 import org.jspecify.annotations.NullMarked;
+import org.jspecify.annotations.Nullable;
 import org.spongepowered.configurate.loader.AbstractConfigurationLoader;
 
 import java.util.Set;
@@ -24,7 +25,7 @@ public class HookedConfigHolder<
 
     public HookedConfigHolder(
             Class<T> configClass,
-            Function<H, T> def,
+            Function<H, @Nullable T> def,
             IConfigStore store,
             Supplier<B> loaderBuilder) {
         super(configClass, def, store, loaderBuilder);

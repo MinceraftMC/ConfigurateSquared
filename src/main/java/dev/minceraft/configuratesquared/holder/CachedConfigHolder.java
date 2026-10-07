@@ -22,7 +22,7 @@ public class CachedConfigHolder<
 
     public CachedConfigHolder(
             Class<T> configClass,
-            Function<H, T> def,
+            Function<H, @Nullable T> def,
             IConfigStore store,
             Supplier<B> loaderBuilder
     ) {

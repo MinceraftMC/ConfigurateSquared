@@ -21,13 +21,13 @@ public class BasicConfigHolder<
         implements IBasicConfigHolder<T> {
 
     private final Class<T> configClass;
-    private final Function<H, T> def;
+    private final Function<H, @Nullable T> def;
     private final IConfigStore store;
     private final Supplier<L> loader;
 
     public BasicConfigHolder(
             Class<T> configClass,
-            Function<H, T> def,
+            Function<H, @Nullable T> def,
             IConfigStore store,
             Supplier<B> loaderBuilder
     ) {

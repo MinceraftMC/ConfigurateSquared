@@ -12,13 +12,26 @@ import java.io.StringWriter;
 public class StringBufferStore implements IConfigStore {
 
     private @Nullable String buffer;
+    private boolean readOnly;
 
     public StringBufferStore() {
+        this.readOnly = false;
+        this.buffer = null;
+    }
+
+    public StringBufferStore(boolean readOnly) {
+        this.readOnly = readOnly;
         this.buffer = null;
     }
 
     public StringBufferStore(String initialBuffer) {
         this.buffer = initialBuffer;
+        this.readOnly = false;
+    }
+
+    public StringBufferStore(String initialBuffer, boolean readOnly) {
+        this.buffer = initialBuffer;
+        this.readOnly = readOnly;
     }
 
     @Nullable
@@ -28,6 +41,14 @@ public class StringBufferStore implements IConfigStore {
 
     public void setBuffer(@Nullable String buffer) {
         this.buffer = buffer;
+    }
+
+    public boolean isReadOnly() {
+        return this.readOnly;
+    }
+
+    public void setReadOnly(boolean readOnly) {
+        this.readOnly = readOnly;
     }
 
     @Override
@@ -40,6 +61,9 @@ public class StringBufferStore implements IConfigStore {
 
     @Override
     public @Nullable BufferedWriter getWriter() {
+        if (this.readOnly) {
+            return null; // Return null if the store is read-only
+        }
         return new BufferedWriter(new StringWriter() {
             @Override
             public void close() {

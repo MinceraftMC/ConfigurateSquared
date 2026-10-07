@@ -10,4 +10,8 @@ public interface ICachedConfigHolder<T> extends IBasicConfigHolder<T> {
     T getConfigOrLoad();
 
     T getConfig();
+
+    default void saveConfig() {
+        this.saveConfig(this.getConfig());
+    }
 }

@@ -1,1 +1,1 @@
-rootProject.name = "ConfigurableConfigurate"
+rootProject.name = "ConfigurateSquared"

@@ -1,4 +1,4 @@
-package dev.minceraft.configureableconfigurate.holder.simplified;
+package dev.minceraft.configuratesquared.holder.simplified;
 
 import org.jspecify.annotations.NullMarked;
 

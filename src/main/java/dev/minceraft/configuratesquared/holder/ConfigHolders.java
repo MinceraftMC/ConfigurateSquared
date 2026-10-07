@@ -1,8 +1,8 @@
-package dev.minceraft.configureableconfigurate.holder;
+package dev.minceraft.configuratesquared.holder;
 
-import dev.minceraft.configureableconfigurate.holder.simplified.IBasicConfigHolder;
-import dev.minceraft.configureableconfigurate.holder.simplified.ICachedConfigHolder;
-import dev.minceraft.configureableconfigurate.stores.IConfigStore;
+import dev.minceraft.configuratesquared.holder.simplified.IBasicConfigHolder;
+import dev.minceraft.configuratesquared.holder.simplified.ICachedConfigHolder;
+import dev.minceraft.configuratesquared.stores.IConfigStore;
 import org.jspecify.annotations.NullMarked;
 import org.spongepowered.configurate.gson.GsonConfigurationLoader;
 import org.spongepowered.configurate.loader.AbstractConfigurationLoader;

@@ -1,6 +1,6 @@
 package dev.minceraft.configureableconfigurate.holder;
 
-import dev.minceraft.configureableconfigurate.holder.projected.ICachedConfigHolder;
+import dev.minceraft.configureableconfigurate.holder.simplified.ICachedConfigHolder;
 import dev.minceraft.configureableconfigurate.stores.IConfigStore;
 import org.jspecify.annotations.NullMarked;
 import org.jspecify.annotations.Nullable;

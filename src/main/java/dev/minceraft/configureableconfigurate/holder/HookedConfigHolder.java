@@ -1,6 +1,6 @@
 package dev.minceraft.configureableconfigurate.holder;
 
-import dev.minceraft.configureableconfigurate.holder.projected.IHookedConfigHolder;
+import dev.minceraft.configureableconfigurate.holder.simplified.IHookedConfigHolder;
 import dev.minceraft.configureableconfigurate.stores.IConfigStore;
 import org.jspecify.annotations.NullMarked;
 import org.spongepowered.configurate.loader.AbstractConfigurationLoader;

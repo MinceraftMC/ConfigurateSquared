@@ -1,7 +1,7 @@
 package dev.minceraft.configureableconfigurate.holder;
 
-import dev.minceraft.configureableconfigurate.holder.projected.IBasicConfigHolder;
-import dev.minceraft.configureableconfigurate.holder.projected.ICachedConfigHolder;
+import dev.minceraft.configureableconfigurate.holder.simplified.IBasicConfigHolder;
+import dev.minceraft.configureableconfigurate.holder.simplified.ICachedConfigHolder;
 import dev.minceraft.configureableconfigurate.stores.IConfigStore;
 import org.jspecify.annotations.NullMarked;
 import org.spongepowered.configurate.gson.GsonConfigurationLoader;
@@ -33,6 +33,12 @@ public final class ConfigHolders<L extends AbstractConfigurationLoader<?>, B ext
 
     public <H extends HookedConfigHolder<H, T, L, B>, T> ICachedConfigHolder<T> hooked(Class<T> configClass, Function<H, T> def, IConfigStore store) {
         return new HookedConfigHolder<>(configClass, def, store, this.loaderSupplier);
+    }
+
+    public static class Builder {
+
+
+
     }
 }
 

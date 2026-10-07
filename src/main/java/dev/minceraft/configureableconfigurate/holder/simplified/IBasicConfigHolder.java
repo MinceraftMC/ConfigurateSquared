@@ -1,4 +1,4 @@
-package dev.minceraft.configureableconfigurate.holder.projected;
+package dev.minceraft.configureableconfigurate.holder.simplified;
 
 import org.jspecify.annotations.NullMarked;
 import org.jspecify.annotations.Nullable;

@@ -1,11 +1,15 @@
 package dev.minceraft.configuratesquared.core.holder;
 
 import dev.minceraft.configuratesquared.core.holder.simplified.IHookedConfigHolder;
+import dev.minceraft.configuratesquared.core.serializer.Serializer;
+import dev.minceraft.configuratesquared.core.serializer.SerializerContext;
 import dev.minceraft.configuratesquared.core.stores.IConfigStore;
+import io.leangen.geantyref.TypeToken;
 import org.jspecify.annotations.NullMarked;
 import org.jspecify.annotations.Nullable;
 import org.spongepowered.configurate.loader.AbstractConfigurationLoader;
 
+import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.CopyOnWriteArraySet;
 import java.util.function.Consumer;
@@ -27,8 +31,11 @@ public class HookedConfigHolder<
             Class<T> configClass,
             Function<H, @Nullable T> def,
             IConfigStore store,
-            Supplier<B> loaderBuilder) {
-        super(configClass, def, store, loaderBuilder);
+            Supplier<B> loaderBuilder,
+            @Nullable Consumer<SerializerContext> contextInitializer,
+            Map<TypeToken<?>, Serializer<?>> serializers
+    ) {
+        super(configClass, def, store, loaderBuilder, contextInitializer, serializers);
     }
 
     @Override

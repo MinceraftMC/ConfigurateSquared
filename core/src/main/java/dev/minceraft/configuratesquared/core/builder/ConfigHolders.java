@@ -136,7 +136,9 @@ public final class ConfigHolders {
                     configClass,
                     def == null ? h -> null : def,
                     Objects.requireNonNull(this.configStore, "Config store is required"),
-                    () -> this.builder
+                    () -> this.builder,
+                    this.contextInitializer,
+                    this.serializers
             );
         }
 
@@ -145,7 +147,9 @@ public final class ConfigHolders {
                     configClass,
                     def == null ? h -> null : def,
                     Objects.requireNonNull(this.configStore, "Config store is required"),
-                    () -> this.builder
+                    () -> this.builder,
+                    this.contextInitializer,
+                    this.serializers
             );
         }
 
@@ -154,7 +158,10 @@ public final class ConfigHolders {
                     configClass,
                     def == null ? h -> null : def,
                     Objects.requireNonNull(this.configStore, "Config store is required"),
-                    () -> this.builder);
+                    () -> this.builder,
+                    this.contextInitializer,
+                    this.serializers
+            );
         }
     }
 }

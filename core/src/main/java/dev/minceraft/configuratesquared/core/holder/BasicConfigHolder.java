@@ -1,7 +1,13 @@
 package dev.minceraft.configuratesquared.core.holder;
 
 import dev.minceraft.configuratesquared.core.holder.simplified.IBasicConfigHolder;
+import dev.minceraft.configuratesquared.core.serializer.InternalSerializer;
+import dev.minceraft.configuratesquared.core.serializer.Serializer;
+import dev.minceraft.configuratesquared.core.serializer.SerializerContext;
 import dev.minceraft.configuratesquared.core.stores.IConfigStore;
+import io.leangen.geantyref.TypeToken;
+import org.checkerframework.checker.nullness.qual.MonotonicNonNull;
+import org.jetbrains.annotations.ApiStatus;
 import org.jspecify.annotations.NullMarked;
 import org.jspecify.annotations.Nullable;
 import org.spongepowered.configurate.ConfigurateException;
@@ -9,6 +15,8 @@ import org.spongepowered.configurate.loader.AbstractConfigurationLoader;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
+import java.util.Map;
+import java.util.function.Consumer;
 import java.util.function.Function;
 import java.util.function.Supplier;
 
@@ -24,18 +32,27 @@ public class BasicConfigHolder<
     private final Function<H, @Nullable T> def;
     private final IConfigStore store;
     private final Supplier<L> loader;
+    private final @Nullable Consumer<SerializerContext> contextInitializer;
+    private final ThreadLocal<@MonotonicNonNull SerializerContext> context = new ThreadLocal<>();
+
 
     public BasicConfigHolder(
             Class<T> configClass,
             Function<H, @Nullable T> def,
             IConfigStore store,
-            Supplier<B> loaderBuilder
-    ) {
+            Supplier<B> loaderBuilder,
+            @Nullable Consumer<SerializerContext> contextInitializer,
+            Map<TypeToken<?>, Serializer<?>> serializers
+            ) {
         this.configClass = configClass;
         this.def = def;
         this.store = store;
+        this.contextInitializer = contextInitializer;
         this.loader = () -> {
             B builder = loaderBuilder.get();
+
+            InternalSerializer.setupSerializers(serializers, this, builder);
+
             BufferedReader reader = store.getReader();
             if (reader != null) {
                 builder.source(() -> reader);
@@ -48,6 +65,14 @@ public class BasicConfigHolder<
         };
     }
 
+    private void setupContext() {
+        SerializerContext ctx = new SerializerContext();
+        if (this.contextInitializer != null) {
+            this.contextInitializer.accept(ctx);
+        }
+        this.context.set(ctx);
+    }
+
     @Override
     public @Nullable T loadConfig(boolean saveAfterLoad) {
         T config;
@@ -55,7 +80,9 @@ public class BasicConfigHolder<
             config = this.def.apply(this.self());
         } else {
             try {
-                config = this.loader.get().load().get(this.configClass);
+                L loader = this.loader.get();
+                setupContext();
+                config = loader.load().get(this.configClass);
             } catch (ConfigurateException exception) {
                 throw new RuntimeException("Failed to load config", exception);
             }
@@ -70,10 +97,17 @@ public class BasicConfigHolder<
     public void saveConfig(T config) {
         L loader = this.loader.get();
         try {
+            setupContext();
             loader.save(loader.createNode().set(this.configClass, config));
         } catch (ConfigurateException exception) {
             throw new RuntimeException("Failed to save config", exception);
         }
+    }
+
+    @Override
+    @ApiStatus.Internal
+    public SerializerContext getContext() {
+        return this.context.get();
     }
 
     @SuppressWarnings("unchecked")

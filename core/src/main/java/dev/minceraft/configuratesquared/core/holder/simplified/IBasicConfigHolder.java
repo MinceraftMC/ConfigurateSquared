@@ -1,5 +1,7 @@
 package dev.minceraft.configuratesquared.core.holder.simplified;
 
+import dev.minceraft.configuratesquared.core.serializer.SerializerContext;
+import org.jetbrains.annotations.ApiStatus;
 import org.jspecify.annotations.NullMarked;
 import org.jspecify.annotations.Nullable;
 
@@ -15,4 +17,7 @@ public interface IBasicConfigHolder<T> {
     }
 
     void saveConfig(T config);
+
+    @ApiStatus.Internal
+    SerializerContext getContext();
 }

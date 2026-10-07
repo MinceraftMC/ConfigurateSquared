@@ -1,5 +1,6 @@
 package dev.minceraft.configuratesquared.core.serializer;
 
+import dev.minceraft.configuratesquared.core.holder.simplified.IBasicConfigHolder;
 import io.leangen.geantyref.GenericTypeReflector;
 import io.leangen.geantyref.TypeToken;
 import org.checkerframework.checker.nullness.qual.Nullable;

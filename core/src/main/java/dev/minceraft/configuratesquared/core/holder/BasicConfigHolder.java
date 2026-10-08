@@ -13,9 +13,8 @@ import org.jspecify.annotations.Nullable;
 import org.spongepowered.configurate.ConfigurateException;
 import org.spongepowered.configurate.loader.AbstractConfigurationLoader;
 
-import java.io.BufferedReader;
-import java.io.BufferedWriter;
 import java.util.Map;
+import java.util.Objects;
 import java.util.function.Consumer;
 import java.util.function.Function;
 import java.util.function.Supplier;
@@ -30,7 +29,6 @@ public class BasicConfigHolder<
 
     private final Class<T> configClass;
     private final Function<H, @Nullable T> def;
-    private final IConfigStore store;
     private final Supplier<L> loader;
     private final @Nullable Consumer<SerializerContext> contextInitializer;
     private final ThreadLocal<@MonotonicNonNull SerializerContext> context = new ThreadLocal<>();
@@ -43,23 +41,20 @@ public class BasicConfigHolder<
             Supplier<B> loaderBuilder,
             @Nullable Consumer<SerializerContext> contextInitializer,
             Map<TypeToken<?>, Serializer<?>> serializers
-            ) {
+    ) {
         this.configClass = configClass;
         this.def = def;
-        this.store = store;
         this.contextInitializer = contextInitializer;
         this.loader = () -> {
             B builder = loaderBuilder.get();
 
             InternalSerializer.setupSerializers(serializers, this, builder);
 
-            BufferedReader reader = store.getReader();
-            if (reader != null) {
-                builder.source(() -> reader);
+            if (store.hasReader()) {
+                builder.source(() -> Objects.requireNonNull(store.getReader()));
             }
-            BufferedWriter writer = store.getWriter();
-            if (writer != null) {
-                builder.sink(() -> writer);
+            if (store.hasWriter()) {
+                builder.sink(() -> Objects.requireNonNull(store.getWriter()));
             }
             return builder.build();
         };
@@ -75,12 +70,13 @@ public class BasicConfigHolder<
 
     @Override
     public @Nullable T loadConfig(boolean saveAfterLoad) {
+        L loader = this.loader.get();
         T config;
-        if (this.store.getReader() == null) {
+
+        if (!loader.canLoad()) {
             config = this.def.apply(this.self());
         } else {
             try {
-                L loader = this.loader.get();
                 setupContext();
                 config = loader.load().get(this.configClass);
             } catch (ConfigurateException exception) {
@@ -96,6 +92,9 @@ public class BasicConfigHolder<
     @Override
     public void saveConfig(T config) {
         L loader = this.loader.get();
+        if (!loader.canSave()) {
+            return;
+        }
         try {
             setupContext();
             loader.save(loader.createNode().set(this.configClass, config));
@@ -114,5 +113,4 @@ public class BasicConfigHolder<
     protected H self() {
         return (H) this;
     }
-
 }

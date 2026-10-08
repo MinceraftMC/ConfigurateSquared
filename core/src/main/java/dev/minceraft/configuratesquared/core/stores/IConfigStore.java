@@ -9,9 +9,22 @@ import java.io.BufferedWriter;
 @NullMarked
 public interface IConfigStore {
 
-    @Nullable
-    BufferedReader getReader();
+    default boolean hasReader() {
+        return false;
+    }
+
+    default boolean hasWriter() {
+        return false;
+    }
 
     @Nullable
-    BufferedWriter getWriter();
+    default BufferedReader getReader() {
+        return null;
+    }
+
+    @Nullable
+    default BufferedWriter getWriter() {
+        return null;
+    }
 }
+

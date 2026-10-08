@@ -23,6 +23,16 @@ public class PathStore implements IConfigStore {
     }
 
     @Override
+    public boolean hasReader() {
+        return true; // Always return true, logic for checking file existence is handled in getReader()
+    }
+
+    @Override
+    public boolean hasWriter() {
+        return !this.readOnly;
+    }
+
+    @Override
     public @Nullable BufferedReader getReader() {
         try {
             return Files.newBufferedReader(this.path);

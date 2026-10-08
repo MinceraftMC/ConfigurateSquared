@@ -9,7 +9,7 @@ import org.jspecify.annotations.Nullable;
 public interface IBasicConfigHolder<T> {
 
     @Nullable
-    T loadConfig(boolean createIfNotExists);
+    T loadConfig(boolean saveAfterLoad);
 
     @Nullable
     default T loadConfig() {

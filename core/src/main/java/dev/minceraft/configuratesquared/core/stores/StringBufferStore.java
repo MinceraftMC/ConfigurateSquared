@@ -52,6 +52,16 @@ public class StringBufferStore implements IConfigStore {
     }
 
     @Override
+    public boolean hasReader() {
+        return true;
+    }
+
+    @Override
+    public boolean hasWriter() {
+        return !this.readOnly;
+    }
+
+    @Override
     public @Nullable BufferedReader getReader() {
         if (this.buffer == null) {
             return null;
